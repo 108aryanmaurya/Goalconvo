@@ -1,13 +1,107 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Brain, Users, Filter, Database, TrendingUp, Play, Pause, RotateCcw } from 'lucide-react';
+import { Brain, Users, Filter, Database, TrendingUp, Play, RotateCcw } from 'lucide-react';
 import ExperienceGenerator from './ExperienceGenerator';
 import MultiAgentSimulator from './MultiAgentSimulator';
 import PostProcessor from './PostProcessor';
 import DatasetConstructor from './DatasetConstructor';
 import Evaluator from './Evaluator';
+
+interface Experience {
+  id: string;
+  domain: string;
+  task: string;
+  personas: Array<{
+    name: string;
+    role: string;
+    traits: string[];
+    background: string;
+  }>;
+  situation: string;
+  goal: string;
+  conversation_starter: string;
+  constraints: {
+    max_turns: number;
+    response_style: string;
+  };
+}
+
+interface Conversation {
+  id: string;
+  turns: Array<{
+    speaker: string;
+    speaker_role: string;
+    text: string;
+    turn_id: number;
+    timestamp: string;
+  }>;
+  experience_id: string;
+  status: 'generating' | 'completed' | 'failed';
+  task_success: boolean;
+  metadata: {
+    total_turns: number;
+    duration_ms: number;
+    tokens_used: number;
+  };
+}
+
+interface FilteredConversation {
+  id: string;
+  original_id: string;
+  status: 'kept' | 'removed' | 'modified';
+  reason: string;
+  score: number;
+  metadata: {
+    similarity_score?: number;
+    fluency_score?: number;
+    coherence_score?: number;
+    task_success_score?: number;
+  };
+}
+
+interface DatasetItem {
+  id: string;
+  conv_id: string;
+  domain: string;
+  task: string;
+  personas: Array<{
+    name: string;
+    role: string;
+    traits: string[];
+  }>;
+  turns: Array<{
+    speaker: string;
+    text: string;
+    turn_id: number;
+  }>;
+  task_success: boolean;
+  metadata: {
+    total_turns: number;
+    domain_category: string;
+    creation_timestamp: string;
+    quality_score: number;
+  };
+}
+
+interface EvaluationMetrics {
+  overall_score: number;
+  diversity_score: number;
+  coherence_score: number;
+  task_success_rate: number;
+  fluency_score: number;
+  groundedness_score: number;
+  categories: {
+    lexical_diversity: number;
+    conversation_length: {
+      avg_turns: number;
+      std_dev: number;
+    };
+    domain_distribution: Record<string, number>;
+    task_success_by_domain: Record<string, number>;
+  };
+}
 
 interface PipelineStep {
   id: string;
@@ -22,12 +116,31 @@ interface PipelineStep {
 export default function GoalConvoDashboard() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [pipelineData, setPipelineData] = useState({
+  const [pipelineData, setPipelineData] = useState<{
+    experiences: Experience[];
+    conversations: Conversation[];
+    filteredConversations: FilteredConversation[];
+    dataset: DatasetItem[];
+    evaluations: EvaluationMetrics;
+  }>({
     experiences: [],
     conversations: [],
     filteredConversations: [],
     dataset: [],
-    evaluations: {}
+    evaluations: {
+      overall_score: 0,
+      diversity_score: 0,
+      coherence_score: 0,
+      task_success_rate: 0,
+      fluency_score: 0,
+      groundedness_score: 0,
+      categories: {
+        lexical_diversity: 0,
+        conversation_length: { avg_turns: 0, std_dev: 0 },
+        domain_distribution: {},
+        task_success_by_domain: {}
+      }
+    }
   });
 
   const steps: PipelineStep[] = [
@@ -78,24 +191,24 @@ export default function GoalConvoDashboard() {
     }
   ];
 
-  const handleStepComplete = (stepIndex: number, data: any) => {
+  const handleStepComplete = (stepIndex: number, data: unknown) => {
     const newPipelineData = { ...pipelineData };
 
     switch (stepIndex) {
       case 0:
-        newPipelineData.experiences = data;
+        newPipelineData.experiences = data as Experience[];
         break;
       case 1:
-        newPipelineData.conversations = data;
+        newPipelineData.conversations = data as Conversation[];
         break;
       case 2:
-        newPipelineData.filteredConversations = data;
+        newPipelineData.filteredConversations = data as FilteredConversation[];
         break;
       case 3:
-        newPipelineData.dataset = data;
+        newPipelineData.dataset = data as DatasetItem[];
         break;
       case 4:
-        newPipelineData.evaluations = data;
+        newPipelineData.evaluations = data as EvaluationMetrics;
         break;
     }
 
@@ -119,7 +232,20 @@ export default function GoalConvoDashboard() {
       conversations: [],
       filteredConversations: [],
       dataset: [],
-      evaluations: {}
+      evaluations: {
+        overall_score: 0,
+        diversity_score: 0,
+        coherence_score: 0,
+        task_success_rate: 0,
+        fluency_score: 0,
+        groundedness_score: 0,
+        categories: {
+          lexical_diversity: 0,
+          conversation_length: { avg_turns: 0, std_dev: 0 },
+          domain_distribution: {},
+          task_success_by_domain: {}
+        }
+      }
     });
   };
 

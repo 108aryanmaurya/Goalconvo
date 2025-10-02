@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     // Simulate processing time
     await new Promise(resolve => setTimeout(resolve, 2500));
 
-    const filteredResults: FilteredConversation[] = conversations.map((conv: any, index: number) => {
+    const filteredResults: FilteredConversation[] = conversations.map((conv: { id: string }, index: number) => {
       // Simulate quality assessment
       const baseScore = Math.random() * 0.3 + 0.7; // 70-100% range
       const isHighQuality = baseScore > 0.8;

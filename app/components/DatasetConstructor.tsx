@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Database, Download, FileText, Archive, CheckCircle, Loader2, Play } from 'lucide-react';
+import { Database, Download, FileText, Archive, Loader2, Play } from 'lucide-react';
 
 interface DatasetItem {
   id: string;

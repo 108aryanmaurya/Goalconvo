@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, MessageCircle, Zap, Clock, Play, Pause, RotateCcw, User, Bot } from 'lucide-react';
+import { Users, MessageCircle, Zap, Play, User, Bot } from 'lucide-react';
 
 interface Conversation {
   id: string;

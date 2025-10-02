@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Sparkles, User, MessageSquare, Target, Clock, ChevronDown, ChevronUp, Play, Loader2 } from 'lucide-react';
 
@@ -34,35 +34,6 @@ export default function ExperienceGenerator({ onComplete }: ExperienceGeneratorP
   const [progress, setProgress] = useState(0);
   const [currentTask, setCurrentTask] = useState('');
 
-  const domains = [
-    { id: 'healthcare', name: 'Healthcare', icon: '🏥' },
-    { id: 'customer_support', name: 'Customer Support', icon: '💬' },
-    { id: 'education', name: 'Education', icon: '📚' },
-    { id: 'business', name: 'Business', icon: '💼' }
-  ];
-
-  const tasks = {
-    healthcare: [
-      { id: 'diagnose_fever', name: 'Diagnose Fever', description: 'Doctor-patient conversation about fever symptoms' },
-      { id: 'symptom_check', name: 'Symptom Assessment', description: 'Initial symptom evaluation' },
-      { id: 'medication_advice', name: 'Medication Consultation', description: 'Advice on medication usage' }
-    ],
-    customer_support: [
-      { id: 'refund_request', name: 'Refund Request', description: 'Processing product return and refund' },
-      { id: 'technical_support', name: 'Technical Support', description: 'Troubleshooting technical issues' },
-      { id: 'booking_issue', name: 'Booking Problem', description: 'Resolving reservation conflicts' }
-    ],
-    education: [
-      { id: 'math_tutoring', name: 'Math Tutoring', description: 'Helping with mathematical concepts' },
-      { id: 'concept_explanation', name: 'Concept Explanation', description: 'Explaining complex topics' },
-      { id: 'homework_help', name: 'Homework Assistance', description: 'Guiding through assignments' }
-    ],
-    business: [
-      { id: 'negotiation', name: 'Contract Negotiation', description: 'Business deal discussions' },
-      { id: 'project_planning', name: 'Project Planning', description: 'Strategic project development' },
-      { id: 'client_meeting', name: 'Client Consultation', description: 'Client requirements gathering' }
-    ]
-  };
 
   const generateExperiences = async () => {
     setIsGenerating(true);
@@ -333,7 +304,7 @@ export default function ExperienceGenerator({ onComplete }: ExperienceGeneratorP
                           <MessageSquare className="w-4 h-4 text-pink-400" />
                           <span className="font-semibold text-white">Conversation Starter</span>
                         </div>
-                        <p className="text-sm text-gray-300 italic">"{experience.conversation_starter}"</p>
+                        <p className="text-sm text-gray-300 italic">&ldquo;{experience.conversation_starter}&rdquo;</p>
                       </div>
 
                       {/* Constraints */}

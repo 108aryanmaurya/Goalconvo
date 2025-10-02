@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Filter, CheckCircle, XCircle, AlertTriangle, TrendingUp, BarChart3, Target } from 'lucide-react';
+import { Filter, CheckCircle, XCircle, AlertTriangle, TrendingUp, BarChart3 } from 'lucide-react';
 
 interface FilteredConversation {
   id: string;

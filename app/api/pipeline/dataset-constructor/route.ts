@@ -40,11 +40,10 @@ export async function POST(request: NextRequest) {
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     const dataset: DatasetItem[] = filtered_conversations
-      .filter((conv: any) => conv.status === 'kept' || conv.status === 'modified')
-      .map((filteredConv: any, index: number) => {
+      .filter((conv: { status: string }) => conv.status === 'kept' || conv.status === 'modified')
+      .map((filteredConv: { original_id: string; score: number }, index: number) => {
         // Mock conversation data based on filtered conversation
         const mockConversation = {
-          id: filteredConv.original_id,
           domain: 'healthcare', // This would come from the original conversation data
           task: 'diagnose_fever',
           personas: [

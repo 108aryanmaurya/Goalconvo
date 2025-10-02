@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, BarChart3, Target, CheckCircle, XCircle, AlertTriangle, Award, Zap } from 'lucide-react';
 
