@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Sparkles, User, MessageSquare, Target, Clock, ChevronDown, ChevronUp, Play, Loader2 } from 'lucide-react';
 
 interface Experience {
